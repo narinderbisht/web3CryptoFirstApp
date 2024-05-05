@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Footer, Navbar, Services, Transaction, Welcome } from './components'
 
 const App = () => {

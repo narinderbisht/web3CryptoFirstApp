@@ -1,8 +1,13 @@
+import React, {useContext} from 'react';
 import { SiEthereum } from 'react-icons/si';
 import { BsInfoCircle } from 'react-icons/bs';
 import Loader from './Loader';
 import { useState } from 'react';
+import { TransactionContext } from '../../context/TransactionContext';
+
 const Welcome = () => {
+    const { connectedAccount, connectAccount } = useContext(TransactionContext);
+    console.log(connectedAccount);
     const commonStyles = 'font-light text-white border-[0.5px] border-gray-400 text-sm flex items-center justify-center min-h-[70px] sm:px-0 px-2';
 
     const InputBox = ({type, placeholder, name, value, changeHandle}) => (
@@ -14,13 +19,17 @@ const Welcome = () => {
     };
 
     const [isLoading, setIsLoader] = useState(false);
+    
     return (
         <div className="flex w-full justify-center items-center">
             <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-10 px-4">
                 <div className="flex flex-col justify-start item-start mf:mr-10 w-full">
                     <h1 className="text-3xl md:text-5xl text-gradient py-2">Send Crypto <br /> across the world</h1>
                     <p className="text-left text-base text-white font-light md:w-9/12 w-11/12">Explore crypto world. Buy and sell cryptocurrencies easily on WebCryptoApp</p>
-                    <button type="button" className="bg-blue-500 w-full rounded-full hover:bg-blue-600 text-white p-2 my-5">Connect Wellet</button>
+                    {!connectedAccount && (
+                        <button type="button" className="bg-blue-500 w-full rounded-full hover:bg-blue-600 text-white p-2 my-5" onClick={connectAccount}>Connect Wellet</button>
+                    )}
+                    
                     <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                         <div className={`rounded-tl-2xl ${commonStyles}`}>Reliabilty</div>
                         <div className={`${commonStyles}`}>Security</div>
