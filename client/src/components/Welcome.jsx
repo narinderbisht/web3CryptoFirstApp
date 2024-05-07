@@ -5,20 +5,31 @@ import Loader from './Loader';
 import { useState } from 'react';
 import { TransactionContext } from '../../context/TransactionContext';
 
+const InputBox = ({type, placeholder, name, value, handleChange}) => (
+    <input type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => handleChange(e, name)}
+        step="0.0001"
+        className="w-full my-2 p-2 rounded-sm outline-none border-none bg-transparent text-white white-glassmorphism" />
+);
+const commonStyles = 'font-light text-white border-[0.5px] border-gray-400 text-sm flex items-center justify-center min-h-[70px] sm:px-0 px-2';
+
 const Welcome = () => {
-    const { connectedAccount, connectAccount } = useContext(TransactionContext);
-    console.log(connectedAccount);
-    const commonStyles = 'font-light text-white border-[0.5px] border-gray-400 text-sm flex items-center justify-center min-h-[70px] sm:px-0 px-2';
+    const { connectedAccount, connectAccount, isLoading, handleChange, fundTransfer, formData } = useContext(TransactionContext);
+    //console.log(connectedAccount);
+    
 
-    const InputBox = ({type, placeholder, name, value, changeHandle}) => (
-        <input type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => changeHandle(e, name)} className="w-full my-2 p-2 rounded-sm outline-none border-none bg-transparent text-white white-glassmorphism"/>
-    );
+    const handleSubmit = (e) => {
+        const { addressTo, amount, message, keyword } = formData;
 
-    const changeHandle = () => {
+        e.preventDefault();
+        if (!addressTo || !amount || !message || !keyword) return;
 
+        fundTransfer();
     };
 
-    const [isLoading, setIsLoader] = useState(false);
+    
     
     return (
         <div className="flex w-full justify-center items-center">
@@ -56,14 +67,14 @@ const Welcome = () => {
                         </div>
                     </div>
                     <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-                        <InputBox type="text" placeholder="Address To" name="addressTo" changeHandle={changeHandle} />
-                        <InputBox type="number" placeholder="Amount (ETH)" name="amount" changeHandle={changeHandle} />
-                        <InputBox type="text" placeholder="Keyword (GIF)" name="keyword" changeHandle={changeHandle} />
-                        <InputBox type="text" placeholder="Enter Message" name="message" changeHandle={changeHandle} />
+                        <InputBox type="text" placeholder="Address To" name="addressTo" handleChange={handleChange} />
+                        <InputBox type="number" placeholder="Amount (ETH)" name="amount" handleChange={handleChange} />
+                        <InputBox type="text" placeholder="Keyword (GIF)" name="keyword" handleChange={handleChange} />
+                        <InputBox type="text" placeholder="Enter Message" name="message" handleChange={handleChange} />
                         {
                             isLoading ?
                                 <Loader />
-                                : (<button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-full py-2 cursor-pointer">Send Eth</button>)
+                                : (<button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-full py-2 cursor-pointer" onClick={handleSubmit}>Send Eth</button>)
                         }
                     </div>
                 </div>
